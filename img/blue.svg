@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440px" height="940px" viewBox="0 0 1440 940" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.2 (51160) - http://www.bohemiancoding.com/sketch -->
+    <title>Bg</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#123075" offset="0%"></stop>
+            <stop stop-color="#092056" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="0" y="0" width="1440" height="940"></rect>
+    </defs>
+    <g id="Cover" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Cover-#11">
+            <g id="Bg">
+                <g>
+                    <mask id="mask-3" fill="white">
+                        <use xlink:href="#path-2"></use>
+                    </mask>
+                    <use id="Mask" fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+                    <rect id="Rectangle" fill="#1A47B0" opacity="0.100000001" style="mix-blend-mode: screen;" mask="url(#mask-3)" transform="translate(720.106781, 808.106781) rotate(45.000000) translate(-720.106781, -808.106781) " x="220.106781" y="308.106781" width="1000" height="1000" rx="100"></rect>
+                    <rect id="Rectangle" fill="#1A47B0" opacity="0.100000001" style="mix-blend-mode: screen;" mask="url(#mask-3)" transform="translate(1378.106781, 452.106781) rotate(45.000000) translate(-1378.106781, -452.106781) " x="878.106781" y="-47.8932188" width="1000" height="1000" rx="100"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,279 @@
+<style type="text/css" media="screen">
+    .details-screen {
+        color: white;
+    }
+
+    .details-screen>.button {
+        color: black;
+    }
+
+    .details-screen>h1 {
+        color: white;
+    }
+
+    .details-screen>h2 {
+        color: #f5f5f5;
+    }
+
+    .details-screen>p {
+        color: #efefef;
+    }
+
+    .details-button {
+        background: #333;
+        color: white;
+        height: 50px;
+        margin: 5px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .details-button:focus {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+        outline: none;
+        transform: scale(1.1, 1.1);
+        background-color: orange;
+        color: black;
+    }
+
+    #categories-panel {
+        position: absolute;
+        top: -25px;
+        right: 5px;
+        left: 5px;
+        padding: 20px 10px;
+    }
+
+    #action-bar-details {
+        position: absolute;
+        bottom: 10px;
+        left: 0px;
+        right: 0px;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .slider {
+        width: 95%;
+        margin: 20px auto;
+    }
+
+    .slick-slide {
+        margin: 0px 20px;
+    }
+
+    .slick-slide {
+        transition: all ease-in-out .25s;
+        opacity: .2;
+    }
+
+    .slick-active {
+        opacity: .5;
+    }
+
+    .slick-current {
+        opacity: 1;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        /* border-bottom:1px solid red; */
+    }
+
+    h2.slick-current {
+        text-shadow: 2px 2px 4px #000000;
+    }
+</style>
+
+
+
+<div id="stage-product-details" class="screen-wrapper">
+
+</div>
+
+
+<div class="container-fluid " id="action-bar-details">
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <p id="status-message" style="font-size:1.5em;color:#f5f5f5;margin-top:20px;text-shadow:2px 2px 4px #000000;">
+                &nbsp; ...
+            </p>
+
+            <button type="button" id="first-button" tabindex="1" class="btn btn-secondary  details-button" data-message="View product videos"
+                onclick="showProductVideo();">
+                <i class="fa fa-video-camera fa-lg"></i>
+            </button>
+            <button type="button" class="btn btn-secondary  details-button" style="margin-right:50px;" data-message="View product Photos"
+                onclick="showProductPhotos();">
+                <i class="fa fa-camera fa-lg"></i>
+            </button>
+
+
+
+            <span style="font-weight:bold;color:white;">Quantity:&nbsp;</span>
+            <span id="product-quantity" style="font-size:1em;color:yellow;font-weight:bold;">1</span>
+            <button type="button" class="btn btn-secondary  details-button" id="quantity-up" data-message="Add quantity">
+                <i class="fa fa-arrow-up fa-lg"></i>
+            </button>
+            <button type="button" class="btn btn-secondary  details-button" id="quantity-down" data-message="Remove quantity">
+                <i class="fa fa-arrow-down fa-lg"></i>
+            </button>
+
+
+            <button type="button" class="btn btn-secondary  details-button" data-message="Add product to basket" id="add-to-basket-button">
+                <i class="fa fa-shopping-basket fa-lg"></i>&nbsp;&nbsp; Add to basket</button>
+            <button type="button" class="btn btn-secondary  details-button" data-message="Checkout basket with PayPal"
+                id="paypal-checkout-button">
+                <i class="fa fa-cc-visa fa-lg"></i>&nbsp;&nbsp; Checkout</button>
+
+            <button type="button" class="btn btn-secondary  details-button" data-message="Previous product" style="margin-left:20px;"
+                id="prev-product">
+                <i class="fa fa-arrow-left fa-lg"></i>
+            </button>
+            <button type="button" class="btn btn-secondary  details-button" data-message="Next product" id="next-product">
+                <i class="fa fa-arrow-right fa-lg"></i>
+            </button>
+        </div>
+    </div>
+    <br>
+</div>
+
+
+<div id="categories-panel">
+    <section class="variable slider" tabindex="10">
+    </section>
+</div>
+
+<template id="template-product-detauls">
+    <div class="container-fluid animated zoomIn" style="margin-top: 50px;">
+        <div class="row">
+            <div class="col-sm-12 details-screen">
+                <h1 style="text-shadow:2px 2px 4px #000000;"> {{title}} </h1>
+                <h2> $ {{price}}</h2>
+
+                <p style="width:80%;text-shadow:2px 2px 4px #000000;">
+                    <br> {{description}}
+                </p>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="template-product-categories">
+    {{#categories}}
+    <h2 style="color:white;padding:5px;">{{.}}</h2>
+    {{/categories}}
+</template>
+
+<script type="text/javascript" charset="utf-8">
+    var quantity = parseInt(1);
+
+    var filteredByShopProducts = App.Products.allProducts;
+
+
+    function setProductBgImage(img, fm, to) {
+        $("#stage-product-details").css("background", "linear-gradient( rgba(0, 0, 0, " + fm + "),rgba(0, 0, 0, " + to +
+            ")), url(" + img + ")");
+        $("#stage-product-details").css("background-repeat", "no-repeat");
+        $("#stage-product-details").css("background-position", "center center");
+        $("#stage-product-details").css("background-size", "cover");
+    }
+
+
+    function showProductSpec() {
+        var curProd = App.Products.getCurrentProduct();
+        var template = $('#template-product-detauls').html();
+        var html = Mustache.to_html(template, curProd);
+        $("#stage-product-details").html(html);
+
+        // Set screen settings & events ..
+        //changeBg("http://balconygardenweb.com/wp-content/uploads/2015/06/mango-tree-1.jpg");
+        setProductBgImage(curProd.images.split(",")[0], 0.7, 0.1);
+
+        $("#product-quantity").html(quantity);
+
+    }
+
+    function setupCategoriesPanel() {
+        $(".variable").empty();
+        var template = $('#template-product-categories').html();
+        var html = Mustache.to_html(template, {
+            categories: App.Products.getCategories()
+        });
+        $(".variable").html(html);
+
+
+        $('.variable').on('afterChange', function (event, slick, currentSlide) {
+            App.Products.allProducts = filteredByShopProducts;
+            var selectedProduct = App.Products.getCategories()[currentSlide];
+            var filterProducts = _.filter(filteredByShopProducts, function (o) {
+                return o.main_category == selectedProduct;
+            });
+            App.Products.allProducts = filterProducts;
+            //console.log("Sub filter on  " + selectedProduct);
+            //console.log("Sub filter products  " + filterProducts);
+            showProductSpec();
+            $("#next-product").focus();
+        });
+
+        $(".variable").slick({
+            dots: false,
+            arrows: false,
+            infinite: true,
+            variableWidth: true,
+            focusOnSelect: true,
+            centerMode: true,
+            swipeToSlide: true,
+            mobileFirst: true,
+        });
+    }
+
+    (function () {
+        //setupCategoriesPanel();
+        showProductSpec();
+
+        $("#quantity-up").click(function (e) {
+            e.preventDefault();
+            quantity++;
+            $("#product-quantity").html(quantity);
+        });
+
+        $("#quantity-down").click(function (e) {
+            e.preventDefault();
+            if (quantity > 1) {
+                quantity--;
+                $("#product-quantity").html(quantity);
+            }
+        });
+
+        $("#prev-product").click(function (e) {
+            e.preventDefault();
+            App.Products.getPrevProduct();
+            showProductSpec();
+        });
+
+        $("#next-product").click(function (e) {
+            e.preventDefault();
+            App.Products.getNextProduct();
+            showProductSpec();
+        });
+
+        $(document.body).on('click', '#add-to-basket-button', function () {
+            var selectedProduct = App.Products.getCurrentProduct();
+            selectedProduct.quantity = quantity;
+            selectedProduct.total = parseInt(quantity) * parseFloat(selectedProduct.price);
+            App.Events.emit("event-add-to-basket", selectedProduct);
+        });
+
+        $(document.body).on('click', '#paypal-checkout-button', function () {
+            showCheckout();
+        });
+
+        $(document.body).on('focus', '.details-button', function () {
+            var msg = $(this).attr("data-message");
+            $("#status-message").html(msg);
+        });
+
+        setTimeout(function () {
+            $("#next-product").focus();
+        }, 1000);
+
+    })();
+</script>

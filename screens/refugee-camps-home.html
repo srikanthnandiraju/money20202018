@@ -1,0 +1,90 @@
+<style type="text/css" media="screen">
+    #home-heading {
+        color: white;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 900;
+        text-shadow: 4px 4px 8px #000;
+        letter-spacing: 10px;
+        text-align: center;
+    }
+    
+    .tv-button>img {
+        width: 70px;
+    }
+    
+    .menu-button {
+        display: inline-block;
+        padding: 10px;
+        margin: 10px;
+    }
+    
+    .menu-button:focus {
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.329);
+        /* outline: none; */
+        background-color: rgba(0, 0, 0, 0.6);
+        color: yellow;
+        /* border: 1px solid red; */
+    }
+    
+    .home-card {
+        min-width: 200px;
+        margin: 15px;
+    }
+</style>
+
+
+
+<h1 id="home-heading" class="animated zoomIn fast">
+    <span style="color:orange;">REFUGEE CAMP</span> SHOPS</h1>
+
+<div class="screen-wrapper flexy">
+    <div class="container-fluid text-center" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-xs-12" id="shops-list">
+            </div>
+        </div>
+    </div>
+</div>
+
+<template id="SHOPS_NAME_TEMPLATE" type="text/template">
+
+	{{#shops}}
+		<div class="menu-button animated zoomIn black-glass pad15 tv-button text-center home-card" id="forfocus_{{tabIndex}}" tabindex="{{tabIndex}}"
+		    onclick="filterProducts('{{shop_name}}');">
+			<img src="img/shop.svg" class="center-block">
+			<h4 class="home-menu-block">
+				<span>{{shop_name}}</span>
+			</h4>
+		</div>
+	{{/shops}}
+
+</template>
+
+
+<script>
+    function createShopsMenu() {
+        $("#shops-list").empty('');
+        var shops = App.Products.getShops();
+        var shopsTabIndex = [];
+        for (var tabIndex = 0; tabIndex < shops.length; tabIndex++) {
+            //console.log(tabIndex);
+            shopsTabIndex.push({
+                'tabIndex': tabIndex + 1,
+                'shop_name': shops[tabIndex]
+            });
+        }
+        var template = $('#SHOPS_NAME_TEMPLATE').html();
+        var html = Mustache.to_html(template, {
+            shops: shopsTabIndex
+        });
+        $("#shops-list").html(html);
+        var focusItem = "#focus_" + shopsTabIndex.length;
+        $(focusItem).focus();
+    }
+
+    $(function() {
+        App.Products.restoreFromCache();
+        App.Products.currentIndex = -1;
+        createShopsMenu();
+    });
+</script>

@@ -1,0 +1,60 @@
+<style type="text/css" media="screen">
+    .slick-gallery {
+        /* margin-top:5%; */
+        padding: 20px;
+    }
+    
+    .slick-slide {
+        text-align: center;
+    }
+    
+    .slick-slide::before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+    
+    .slick-slide img {
+        vertical-align: middle;
+        display: inline-block;
+    }
+    
+    .slick-slide:focus {
+        outline: none;
+    }
+</style>
+
+<div class="slick-gallery screen-wrapper flexy">
+</div>
+
+<template id="template-product-photos">
+    {{#.}}
+    <figure class="slick-slide">
+        <img class="img-responsive center-block" style="border:2px solid white;max-height:400px;" src="{{.}}" />
+    </figure>
+    {{/.}}
+</template>
+
+
+<script>
+    function showProductPics() {
+        var imagesArray = App.Products.getCurrentProduct().images.split(",");
+        var template = $('#template-product-photos').html();
+        var html = Mustache.to_html(template, imagesArray);
+        $(".slick-gallery").html(html);
+        $('.slick-gallery').slick({
+            focusOnSelect: true,
+            centerMode: true,
+            centerPadding: '100px',
+            slidesToShow: 1,
+            dots: true,
+            prevArrow: false,
+            nextArrow: false,
+        });
+        $(".slick-gallery .slick-slide:first-child").focus();
+    }
+    $(function() {
+        showProductPics();
+    });
+</script>

@@ -1,0 +1,82 @@
+<style type="text/css" media="screen">
+    #home-heading {
+        color: white;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 900;
+        text-shadow: 4px 4px 8px #000;
+        letter-spacing: 10px;
+        text-align: center;
+    }
+    
+    .tv-button>img {
+        width: 70px;
+    }
+    
+    .panel:focus {
+        border: 1px solid black;
+    }
+    
+    .panel:focus {
+        outline: none;
+        color: yellow;
+        border: 1px solid white;
+    }
+    
+    .home-card {
+        min-width: 200px;
+        margin: 5px;
+    }
+
+    small{
+        color:aqua !important;
+    }
+</style>
+
+
+
+<h1 id="home-heading" class="animated zoomIn fast">
+    <span style="color:orange;">REFUGEE</span> DIGITAL MALL</h1>
+
+<div class="flexy screen-wrapper">
+    <div class="row">
+
+        <div class="col-xs-4">
+            <div class="panel panel-default animated fadeInRight fast black-glass pad15 tv-button text-center home-card" tabindex="2" onclick="showRefugeeCamps();">
+                <img src="img/shop.svg" class="center-block">
+                <h1 class="home-menu-block">
+                    <small>Refugee</small>
+                    <br> Shops
+                </h1>
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+            <div class="panel panel-default animated fadeInDown fast black-glass pad15 tv-button text-center home-card" tabindex="3" onclick="showCheckout();">
+                <img src="img/basket.svg" class="center-block">
+                <h1 class="home-menu-block">
+                    <small>Shopping</small>
+                    <br> Basket
+                </h1>
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+            <div class="panel panel-default animated fadeInLeft fast black-glass pad15 tv-button text-center home-card" tabindex="4" onclick="showSettings();">
+                <img src="img/gear.svg" class="center-block">
+                <h1 class="home-menu-block">
+                    <small>Digital Mall</small>
+                    <br> Settings
+                </h1>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(function() {
+        // changeBgA(
+        //     "https://images.unsplash.com/photo-1508176523-817e4d13f21e?auto=format&fit=crop&w=1267&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D",
+        //     1, 0.9);
+    });
+</script>

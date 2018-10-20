@@ -9,6 +9,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet">
     <link href='css/default.css' rel='stylesheet' type='text/css'>
     <style type="text/css" media="screen">
+        body {
+            background: #00276A;
+            background-image: linear-gradient(to right, #00276A, #336699);
+        }
     </style>
 </head>
 <html>
@@ -30,12 +34,14 @@
                 dataLevel: "FULL",
                 paymentRequest: {
                     currencyCode: "USD",
-                    subtotal: "11.00"
+                    subtotal: "10.00"
                 }
             });
             V.on("payment.success", function (payment) {
                 console.log(JSON.stringify(payment));
-                $("#message-heading").html("Thank you for using the Couch Commerce for Cause.");
+                $("#message-heading").html("Thank you for using <bt/> <strong>Visa Checkout</strong><br/> to buy from the Couch Commerce for Cause.");
+
+                $("#header").html("Thank you for using <br/> <strong>Visa Checkout</strong><br/>to buy from the Couch Commerce for Cause.");
                 $("#visa-button").hide();
             });
             V.on("payment.cancel", function (payment) {
@@ -49,14 +55,9 @@
 
         $(document).ready(function () {
 
-            $("#homebutton").click(function (e) {
-                window.location.href = "#/home";
-                $("#homebutton").hide();
-            });
-            
         });
     </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </body>
 
 </html>

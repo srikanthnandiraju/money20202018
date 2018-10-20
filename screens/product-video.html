@@ -1,0 +1,95 @@
+<style type="text/css" media="screen">
+    #player {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        right: 0px;
+        margin: auto;
+        width: 100%;
+        height: 100%;
+        /* border: 2px dashed yellow; */
+    }
+    
+    #controls-container {
+        position: absolute;
+        left: 0px;
+        bottom: 10px;
+        right: 0px;
+        margin: auto;
+        /* border: 2px dashed red; */
+        z-index: 999 !important;
+    }
+</style>
+
+
+<div class="container-fluid text-center" id="controls-container">
+    <div class="row">
+        <div class="float-left">
+            <button class="btn  btn-primary tv-button" id="play-button" onclick="playVideo()">Play</button>&nbsp;&nbsp;
+            <button class="btn  btn-warning tv-button" id="stop-button" onclick="pauseVideo()">Pause</button>&nbsp;&nbsp;
+            <button class="btn  btn-danger tv-button" id="stop-button" onclick="stopVideo()">Stop</button>
+        </div>
+    </div>
+</div>
+<div id="player" tabindex="-1"></div>
+
+
+<script>
+    $("#play-button").focus();
+</script>
+
+<script>
+    var player;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '390',
+            width: '640',
+            videoId: App.Products.getCurrentProduct().videos,
+            playerVars: {
+                'controls': 0
+            },
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+
+    function onPlayerStateChange(event) {
+        if (playerStatus == -1) {
+            color = "#37474F"; // unstarted = gray
+        } else if (playerStatus == 0) {
+            color = "#FFFF00"; // ended = yellow
+        } else if (playerStatus == 1) {
+            color = "#33691E"; // playing = green
+        } else if (playerStatus == 2) {
+            color = "#DD2C00"; // paused = red
+        } else if (playerStatus == 3) {
+            color = "#AA00FF"; // buffering = purple
+        } else if (playerStatus == 5) {
+            color = "#FF6DOO"; // video cued = orange
+        }
+
+    }
+
+    function playVideo() {
+        player.playVideo()
+    }
+
+    function pauseVideo() {
+        player.pauseVideo()
+    }
+
+    function stopVideo() {
+        player.stopVideo();
+    }
+
+
+    onYouTubeIframeAPIReady();
+</script>

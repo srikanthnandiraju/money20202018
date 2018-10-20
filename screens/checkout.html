@@ -1,0 +1,200 @@
+<style type="text/css" media="screen">
+    .table-container {
+        display: table;
+        height: 100vh;
+        width: 100%;
+    }
+    
+    .table-div {
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+        width: 50%;
+        padding: 1rem;
+    }
+    
+    .left-half {
+        background: #232526;
+    }
+    
+    .right-half {
+        background: #222;
+    }
+    
+    .fa-minus-circle {
+        color: red;
+    }
+    
+    .fa-minus-circle:focus {
+        color: yellow;
+        transform: rotate(360deg) scale(1.5, 1.5);
+    }
+    
+    th {
+        text-align: center;
+    }
+</style>
+
+<section class="table-container" style="position:fixed;top:0px;left:0px;">
+    <div class="left-half table-div">
+        <div class="panel panel-body animated fadeInLeft" style="background: rgba(0,0,0,0.2);width:90%;margin:auto;color:white;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th width="5%"> &nbsp; </th>
+                        <th width="70%"> Title </th>
+                        <th width="20%"> Price </th>
+                        <th width="5%"> &nbsp; </th>
+                    </tr>
+                </thead>
+                <tbody id="stage-checkout-items">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="right-half table-div">
+        <div class="panel panel-body text-center animated fadeInRight" style="background: none;">
+            <p>
+                <h1 style="color:orange;">Total $
+                    <span id="label-grand-total"> 2000</span>
+                </h1>
+                <br>
+
+                <img id="qrcode-image" width="60%" style="background:white;" class="img img-responsive center-block" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                    alt="">
+                <br>
+                <br>
+                <button class="btn btn-primary btn-lg tv-button" id="send-basket-sms-button">Send Basket to Mobile
+                    <br>
+                    <small id="receiver-mobile">your number</small>
+                </button>
+            </p>
+        </div>
+    </div>
+</section>
+
+<template id="template-checkout-row">
+    {{#rows}}
+    <tr class="animated fadeIn">
+        <td>
+            <i class="fa fa-picture-o" aria-hidden="true"></i>
+        </td>
+        <td>{{title}} &nbsp;
+            <span style="color:orange;">(qty: {{quantity}})</span>
+        </td>
+        <td>₹{{price}}</td>
+        <td>
+            <i class="fa fa-minus-circle tv-button class-card-delete" tabindex="1" aria-hidden="true" data-item-id="{{id}}"></i>
+            <p></p>
+        </td>
+    </tr>
+    {{/rows}}
+</template>
+
+<script type="text/javascript" charset="utf-8">
+    var newBasket = {};
+
+    $('body').bind('sms-checkout', function(e, data) {
+        sendBasketSMS();
+    });
+
+
+    function startListeningForPaymentConfirmation(basket_id) {
+        console.log("LIstening for payments on " + basket_id);
+        var pubnub = PUBNUB.init({
+            publish_key: 'pub-c-04318e42-5630-4853-bd7f-eca169eafed8',
+            subscribe_key: 'sub-c-8f0cc37c-c03d-11e3-b230-02ee2ddab7fe'
+        });
+        pubnub.subscribe({
+            channel: basket_id,
+            message: function(m) {
+                alert("Payment Received\n Thanks for using Fefugee Digital mall\non your Smart TV");
+                showHome();
+            },
+        });
+    }
+
+    function showCheckoutItems() {
+        var template = $('#template-checkout-row').html();
+        var html = Mustache.to_html(template, {
+            rows: App.Basket.selectedItems
+        });
+        $("#stage-checkout-items").html(html);
+        $("#label-grand-total").html(App.Basket.getTotal());
+
+        // publish basket only when there is items in cart
+        if (App.Basket.selectedItems.length > 0) {
+            var allBaskets = [];
+            RemoteStore.get(function(data) {
+                if (data && data.length > 0) {
+                    console.log("REMOTE BASKETS");
+                    allBaskets = data;
+                } else {
+                    console.log("Looks like remote baskets are null. Resetting");
+                    allBaskets = [];
+                }
+
+                newBasket = {
+                    basket_id: App.Utils.generateId(),
+                    items: App.Basket.selectedItems,
+                    total: App.Basket.getTotal()
+                }
+                allBaskets.push(newBasket);
+                RemoteStore.update(allBaskets, function(updateStatus) {
+                    console.log("updated " + updateStatus);
+                    $("#qrcode-image").attr("src",
+                        "http://chart.apis.google.com/chart?cht=qr&chs=500x500&choe=UTF-8&chld=H&chl=" +
+                        "http://villagedigitalmall.com/fire/checkout/?basket=" + newBasket.basket_id
+                    );
+                    startListeningForPaymentConfirmation(newBasket.basket_id);
+                })
+            });
+        }
+    }
+
+    function sendBasketSMS() {
+        var SID = "AC401c92e31f224874e8ad922c68f92ab6"
+        var Key = "9448912664ab528eaa239f03cd2d6eb8"
+        $.ajax({
+            type: 'POST',
+            url: 'https://api.twilio.com/2010-04-01/Accounts/' + SID + '/Messages.json',
+            data: {
+                "To": "14084069350",
+                //"To": App.User.mobile,
+                "From": "+14082176551",
+                "Body": "http://villagedigitalmall.com/fire/checkout?basket=" + newBasket.basket_id
+            },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Authorization", "Basic " + btoa(SID + ':' + Key));
+            },
+            success: function(data) {
+                console.log("SUCCESS\n" + data);
+                //alert("Basket sent to Mobile for checkout");
+                $("#send-basket-sms-button").html("Waiting for Payment..");
+
+            },
+            error: function(data) {
+                console.log("ERROR\n" + data);
+            }
+        });
+    }
+
+    (function() {
+
+        showCheckoutItems();
+        $("#receiver-mobile").html(App.User.mobile);
+        $(document.body).on('click', '.class-card-delete', function() {
+            var idToDelete = $(this).attr("data-item-id");
+            App.Basket.removeById(idToDelete);
+            console.log("Clicked .." + idToDelete);
+            showCheckoutItems();
+        });
+
+        $("#send-basket-sms-button").off('click').on('click', function() {
+            // Your Twilio credentials
+            sendBasketSMS();
+        });
+
+    })();
+</script>

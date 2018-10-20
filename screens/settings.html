@@ -1,0 +1,55 @@
+<style type="text/css" media="screen">
+    label {
+        font-family: Roboto;
+        letter-spacing: 2px;
+        text-align: left;
+        color: white;
+    }
+</style>
+<div class="screen-wrapper flexy" style="text-align: center;padding:10px;">
+    <div id="feedback_form" class="vcenter-item">
+        <h1 class="animated fadeInDown" style="color:white;">Digital Mall Setting
+            <br>
+            <small style="color:aqua;">Configure your mobile number & email to access your shopping basket over mobile</small>
+        </h1>
+        <div class="container animated zoomIn" style="margin-top: 20px;">
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+                    <div class="panel panel-info animated fadeInUp fast" style="background: rgba(0,0,0,0.1);border:none;border-radius: 0px;padding:10px;">
+                        <div class="panel-body">
+                            <br>
+                            <div class="form-group text-left">
+                                <label for="feedback_title">Enter mobile number with areacode</label>
+                                <input type="text" name="mobile" id="mobile" class="tv-button form-control input-md" placeholder="enter mobile number" required
+                                    tabindex="1">
+                            </div>
+
+                            <div class="form-group text-left">
+                                <label for="feedback_title">Email</label>
+                                <input type="text" name="email" id="email" class="tv-button form-control input-md" placeholder="enter email" required tabindex="2">
+                            </div>
+
+                            <button id="save-settings-button" value="Login" class="btn btn-primary tv-button" tabindex="3">
+                                Save
+                            </button>
+                            <br>
+                            <h3 id="status-message" style="color:white"></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("#mobile").val(App.User.mobile);
+        $("#email").val(App.User.email);
+        $(document.body).on('click', '#save-settings-button', function () {
+            App.User.update($("#email").val(), $("#mobile").val());
+            $("#status-message").html("Saved settings successfully");
+        });
+    });
+</script>

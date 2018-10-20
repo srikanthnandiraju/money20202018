@@ -11,7 +11,11 @@ body {
     /* background-image: url(../img/blue.svg); */
     /* background-image: linear-gradient(to right, #333, #555); */
     /* background-image: radial-gradient(circle, #444, #111); */
+    
     background-image: linear-gradient(to bottom, #222, #333, #444);
+    /* background: #00276A;
+    background-image: linear-gradient(to right, #00276A, #336699); */
+
     background-size: cover;
     background-size: cover;
     -webkit-background-size: cover;
@@ -107,16 +111,6 @@ h4 {
     bottom: 1px;
     right: 1px;
 }
-
-.animated {
-    -webkit-backface-visibility: hidden;
-    /*-webkit-transform-style: preserve-3d;*/
-    -webkit-animation-duration: .1s;
-    /* Chrome, Safari, Opera */
-    animation-duration: 1s;
-    -moz-animation-duration: 1s;
-}
-
 
 /* -------------- PANEL STYLES ----------------- */
 
