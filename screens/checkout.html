@@ -145,7 +145,8 @@
                     console.log("updated " + updateStatus);
                     $("#qrcode-image").attr("src",
                         "http://chart.apis.google.com/chart?cht=qr&chs=500x500&choe=UTF-8&chld=H&chl=" +
-                        "http://villagedigitalmall.com/fire/checkout/?basket=" + newBasket.basket_id
+                        // "http://villagedigitalmall.com/fire/checkout/?basket=" + newBasket.basket_id
+                        "https://srikanthnandiraju.github.io/money20202018/checkout/?basket=" + newBasket.basket_id
                     );
                     startListeningForPaymentConfirmation(newBasket.basket_id);
                 })
@@ -163,7 +164,7 @@
                 "To": "14084069350",
                 //"To": App.User.mobile,
                 "From": "+14082176551",
-                "Body": "http://villagedigitalmall.com/fire/checkout?basket=" + newBasket.basket_id
+                "Body": "https://srikanthnandiraju.github.io/money20202018/checkout/?basket=" + newBasket.basket_id
             },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + btoa(SID + ':' + Key));
