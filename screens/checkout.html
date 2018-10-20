@@ -102,10 +102,9 @@
 
     function startListeningForPaymentConfirmation(basket_id) {
         console.log("LIstening for payments on " + basket_id);
-        var pubnub = PubNub.init({
+        var pubnub = PUBNUB.init({
             publish_key: 'pub-c-04318e42-5630-4853-bd7f-eca169eafed8',
-            subscribe_key: 'sub-c-8f0cc37c-c03d-11e3-b230-02ee2ddab7fe',
-            ssl: true
+            subscribe_key: 'sub-c-8f0cc37c-c03d-11e3-b230-02ee2ddab7fe'
         });
         pubnub.subscribe({
             channel: basket_id,
@@ -145,7 +144,7 @@
                 RemoteStore.update(allBaskets, function(updateStatus) {
                     console.log("updated " + updateStatus);
                     $("#qrcode-image").attr("src",
-                        "https://chart.apis.google.com/chart?cht=qr&chs=500x500&choe=UTF-8&chld=H&chl=" +
+                        "http://chart.apis.google.com/chart?cht=qr&chs=500x500&choe=UTF-8&chld=H&chl=" +
                         // "http://villagedigitalmall.com/fire/checkout/?basket=" + newBasket.basket_id
                         "https://srikanthnandiraju.github.io/money20202018/checkout/?basket=" + newBasket.basket_id
                     );
@@ -165,7 +164,7 @@
                 "To": "14084069350",
                 //"To": App.User.mobile,
                 "From": "+14082176551",
-                "Body": "https://srikanthnandiraju.github.io/money20202018/checkout/?basket=" + newBasket.basket_id
+                "Body": "http://villagedigitalmall.com/fire/checkout?basket=" + newBasket.basket_id
             },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + btoa(SID + ':' + Key));

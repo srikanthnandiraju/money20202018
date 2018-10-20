@@ -57,8 +57,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
-    <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.21.6.js"></script>
-
+    <script src="https://cdn.pubnub.com/pubnub-3.7.16.min.js" type="text/javascript" charset="utf-8"></script>
 
     <script>
         var RemoteStore = {
@@ -111,10 +110,9 @@
 
         function confirmPaymentNotification(data) {
             // Init
-            var pubnub = PubNub.init({
+            var pubnub = PUBNUB.init({
                 publish_key: 'pub-c-04318e42-5630-4853-bd7f-eca169eafed8',
-                subscribe_key: 'sub-c-8f0cc37c-c03d-11e3-b230-02ee2ddab7fe',
-                ssl : true
+                subscribe_key: 'sub-c-8f0cc37c-c03d-11e3-b230-02ee2ddab7fe'
             });
 
             // SEND
