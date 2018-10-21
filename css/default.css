@@ -78,7 +78,7 @@ h4 {
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.7);
     /*	background: url(../img/bg.jpg) no-repeat center top;*/
-    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), url(../img/bg.jpg) no-repeat center center;
+    /* background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), url(../img/bg.jpg) no-repeat center center; */
     background-size: cover;
 }
 
