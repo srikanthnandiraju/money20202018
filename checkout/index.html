@@ -47,6 +47,7 @@
                         <span class="label label-primary" id="total-price">0.0</span>
                     </p>
                 </div>
+                <img id="kind-meter" class="center block" src="" alt="" style="border-radius:10px;margin:10px;">
             </div>
 
         </div>
@@ -152,7 +153,9 @@
                 $("#message-heading").html(
                     "Thank you for using <bt/> <strong>Visa Checkout</strong><br/> to buy from the Couch Commerce for Cause."
                 );
-
+                    
+                $("#kind-meter").attr('src',"https://chart.googleapis.com/chart?chs=400x225&cht=gom&chd=t:70&chco=FF0000,FF8040,FFFF00,00FF00,00FFFF,0000FF,800080&chxt=x,y&chxl=0:|Kindness%20Index|1:|kind|generous|philanthroper");
+                
                 $("#header").html(
                     "Thank you for using <br/> <strong>Visa Checkout</strong><br/>to buy from the Couch Commerce for Cause."
                 );
