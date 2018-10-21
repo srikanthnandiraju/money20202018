@@ -110,7 +110,7 @@
         pubnub.subscribe({
             channel: basket_id,
             message: function(m) {
-                alert("Payment Received\n Thanks for using Fefugee Digital mall\non your Smart TV");
+                alert("Payment Received\n Thanks for using Refugee Digital mall\non your Smart TV");
                 showHome();
             },
         });
@@ -165,7 +165,7 @@
                 "To": "14084069350",
                 //"To": App.User.mobile,
                 "From": "+14082176551",
-                "Body": "http://villagedigitalmall.com/fire/checkout?basket=" + newBasket.basket_id
+                "Body": "https://srikanthnandiraju.github.io/money20202018/checkout/?basket=" + newBasket.basket_id
             },
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + btoa(SID + ':' + Key));
