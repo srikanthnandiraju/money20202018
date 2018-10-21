@@ -7,24 +7,23 @@
     <title>DIGITAL MALL CHECKOUT</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css' rel='stylesheet' type='text/css'>
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css' rel='stylesheet'
-        type='text/css'>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
     <style type="text/css" media="screen">
         body {
             background: #293134;
             font-family: Courier New, Courier, monospace;
         }
-
+        
         #paypal-button-container {
             margin-top: 100px;
         }
-
+        
         .flexy {
             display: flex;
             justify-content: center;
             align-items: center;
         }
-
+        
         #checkout-wrapper {
             position: absolute;
             top: 0px;
@@ -39,10 +38,12 @@
     <div class="flexy" id="checkout-wrapper">
         <div class="container">
             <div class="row text-center">
-                <div class="col-xs-12 text-center" id="header" style="color:white;">
-                    <img id="visa-button" alt="Visa Checkout" class="v-button" role="button" src="https://sandbox.secure.checkout.visa.com/wallet-services-web/xo/button.png" />
-                    <p id="confirm-para" style="color:white;padding:20px 0px;">Click on the Visa Checkout button to
-                        checkout your Refugee Digital mall basket
+                <div class="col-xs-12 text-center">
+                    <h2 style="color:white;">Select a Payment Method</h2>
+                </div>
+                <div class="col-xs-12 text-center">
+                    <div id="paypal-button-container"></div>
+                    <p id="confirm-para" style="color:white;padding:20px 0px;">Click on the button to checkout your Village Digital mall basket
                         <br>with total of
                         <span class="label label-primary" id="total-price">0.0</span>
                     </p>
@@ -58,12 +59,10 @@
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
     <script src="https://cdn.pubnub.com/pubnub-3.7.16.min.js" type="text/javascript" charset="utf-8"></script>
 
-    <script type="text/javascript" src="https://sandbox-assets.secure.checkout.visa.com/checkout-widget/resources/js/integration/v1/sdk.js"></script>
-
     <script>
         var RemoteStore = {
             url: undefined,
-            update: function (data, callback) {
+            update: function(data, callback) {
                 var updatedData = JSON.stringify(data);
                 parent = this;
                 $.ajax({
@@ -72,22 +71,22 @@
                     data: updatedData,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    success: function (data, textStatus, jqXHR) {
+                    success: function(data, textStatus, jqXHR) {
                         if (callback) {
                             callback(data);
                         }
                     }
                 });
             },
-            get: function (callback) {
+            get: function(callback) {
                 var fetchURL = this.url;
-                $.get(fetchURL, function (data, textStatus, jqXHR) {
+                $.get(fetchURL, function(data, textStatus, jqXHR) {
                     if (callback) {
                         callback(data);
                     }
                 });
             },
-            setRoot: function (root) {
+            setRoot: function(root) {
                 this.url = root;
             }
         };
@@ -97,7 +96,7 @@
             var params = {};
             var search = decodeURIComponent(window.location.href.slice(window.location.href.indexOf('?') + 1));
             var definitions = search.split('&');
-            definitions.forEach(function (val, key) {
+            definitions.forEach(function(val, key) {
                 var parts = val.split('=', 2);
                 params[parts[0]] = parts[1];
             });
@@ -114,7 +113,7 @@
             var pubnub = PUBNUB.init({
                 publish_key: 'pub-c-04318e42-5630-4853-bd7f-eca169eafed8',
                 subscribe_key: 'sub-c-8f0cc37c-c03d-11e3-b230-02ee2ddab7fe',
-                ssl: true
+                ssl:true
             });
 
             // SEND
@@ -137,43 +136,10 @@
         }
 
 
-
-        function onVisaCheckoutReady() {
-            V.init({
-                apikey: "55VMBX40Q4OE6JJ8CLZN21eDK2-WK_onlYtAlN2PU8bLkSWkE",
-                dataLevel: "FULL",
-                paymentRequest: {
-                    currencyCode: "USD",
-                    subtotal: "10.00"
-                }
-            });
-            V.on("payment.success", function (payment) {
-                console.log(JSON.stringify(payment));
-                $("#message-heading").html(
-                    "Thank you for using <bt/> <strong>Visa Checkout</strong><br/> to buy from the Couch Commerce for Cause."
-                );
-
-                $("#header").html(
-                    "Thank you for using <br/> <strong>Visa Checkout</strong><br/>to buy from the Couch Commerce for Cause."
-                );
-                $("#visa-button").hide();
-                confirmPaymentNotification(payment);
-            });
-            V.on("payment.cancel", function (payment) {
-                alert(JSON.stringify(payment));
-            });
-            V.on("payment.error", function (payment, error) {
-                alert(JSON.stringify(error));
-            });
-        }
-
-
-
-
         var allBaskets = [];
         var foundBasket = {};
         var basketIdInRequest = "";
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Read param and get all baskets    
             var params = getUrlParams();
             var basket = params.basket;
@@ -206,7 +172,63 @@
                     bal = bal + parseFloat(convertToDollar(foundBasket.items[i].price));
                 }
                 console.log("Total " + bal);
+
+
+                paypal.Button.render({
+                    // Set your environment
+                    env: 'sandbox', // sandbox | production
+                    // Specify the style of the button
+                    style: {
+                        label: 'paypal',
+                        size: 'responsive', // small | medium | large | responsive
+                        shape: 'rect', // pill | rect
+                        color: 'blue', // gold | blue | silver | black
+                        tagline: false
+                    },
+
+
+
+                    // PayPal Client IDs - replace with your own
+                    // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+
+                    client: {
+                        sandbox: 'ATMbMdYS-siK6NjL1CIAdEGIvGuNJmQwXdBc1lkaAtEpogL9uqPyVBidnCbyn584-r-xeoRXVQchTlYl',
+                        production: '<insert production client id>'
+                    },
+
+
+
+                    payment: function(data, actions) {
+                        return actions.payment.create({
+                            payment: {
+                                transactions: [{
+                                    amount: {
+                                        total: convertToDollar(foundBasket.total),
+                                        currency: 'USD',
+                                    },
+                                    description: "Shopping basket from Digital mall app",
+                                    custom: "basket_id:" + basket,
+                                    "item_list": {
+                                        "items": items
+                                    }
+                                }]
+                            }
+                        });
+                    },
+
+                    onAuthorize: function(data, actions) {
+                        return actions.payment.execute().then(function() {
+                            //window.alert('Payment Complete!');
+                            confirmPaymentNotification(data);
+                            $("#confirm-para").html("Thank you for the purchase.");
+                            $("#paypal-button-container").hide();
+                        });
+                    }
+
+                }, '#paypal-button-container');
             }
+
+
 
         });
     </script>
